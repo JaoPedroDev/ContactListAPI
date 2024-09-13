@@ -33,7 +33,7 @@ public class CorsConfig {
     var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
     var corsConfiguration = new CorsConfiguration();
     corsConfiguration.setAllowCredentials(true);
-    corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+    corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080"));
 
     corsConfiguration.setAllowedHeaders(
         List.of(ORIGIN, ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_TYPE, ACCEPT, AUTHORIZATION, X_REQUESTED_WITH,

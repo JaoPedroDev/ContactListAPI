@@ -45,6 +45,18 @@ public class ContactService {
     }
 
     public void deleteContact(Contact contact) {
+        String photoUrl = contact.getPhotoUrl();
+        if (photoUrl != null) {
+            try {
+                int index = photoUrl.lastIndexOf("/");
+                String fileName = photoUrl.substring(index + 1);
+                Path fileStorageLocation = Paths.get("./uploads/" + fileName).toAbsolutePath().normalize();
+                log.info(fileStorageLocation.toString());
+                Files.deleteIfExists(fileStorageLocation);
+            } catch (Exception e) {
+                throw new RuntimeException("Unable to delete image");
+            }
+        }
         log.info("Deleting user with id: {}", contact.getId());
         contactRepo.delete(contact);
     }
