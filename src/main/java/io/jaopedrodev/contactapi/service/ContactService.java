@@ -44,18 +44,15 @@ public class ContactService {
         return contactRepo.save(contact);
     }
 
+    public Contact updateContact(Contact contact) {
+        log.info("Updating user with id: {}", contact.getId());
+        return contactRepo.save(contact);
+    }
+
     public void deleteContact(Contact contact) {
         String photoUrl = contact.getPhotoUrl();
         if (photoUrl != null) {
-            try {
-                int index = photoUrl.lastIndexOf("/");
-                String fileName = photoUrl.substring(index + 1);
-                Path fileStorageLocation = Paths.get("./uploads/" + fileName).toAbsolutePath().normalize();
-                log.info(fileStorageLocation.toString());
-                Files.deleteIfExists(fileStorageLocation);
-            } catch (Exception e) {
-                throw new RuntimeException("Unable to delete image");
-            }
+            deletePhoto(photoUrl);
         }
         log.info("Deleting user with id: {}", contact.getId());
         contactRepo.delete(contact);
@@ -64,10 +61,25 @@ public class ContactService {
     public String uploadPhoto(String id, MultipartFile file) {
         log.info("Uploading photo for user id: {}", id);
         Contact contact = getContactById(id);
+        if (contact.getPhotoUrl() != null) {
+            deletePhoto(contact.getPhotoUrl());
+        }
         String photoUrl = photoFunction.apply(id, file);
         contact.setPhotoUrl(photoUrl);
         contactRepo.save(contact);
         return photoUrl;
+    }
+
+    private void deletePhoto (String photoUrl) {
+        try {
+            int index = photoUrl.lastIndexOf("/");
+            String fileName = photoUrl.substring(index + 1);
+            Path fileStorageLocation = Paths.get("./uploads/" + fileName).toAbsolutePath().normalize();
+            log.info(fileStorageLocation.toString());
+            Files.deleteIfExists(fileStorageLocation);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to delete image");
+        }
     }
 
     private final Function<String, String> fileExtension = filename -> Optional.of(filename).filter(name -> name.contains("."))

@@ -36,7 +36,12 @@ public class ContactResource {
         return ResponseEntity.created(URI.create("/contacts/userID")).body(contactService.createContact(contact));
     }
 
-    @DeleteMapping("/{id}")
+    @PutMapping
+    public ResponseEntity<Contact> updateContact(@RequestBody Contact contact) {
+        return ResponseEntity.ok().body(contactService.updateContact(contact));
+    }
+
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteContact(@PathVariable(value = "id") String id) {
         contactService.deleteContact(contactService.getContactById(id));
         return ResponseEntity.ok("User with id " + id + " Deleted");
