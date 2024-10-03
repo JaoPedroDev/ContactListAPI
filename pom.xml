@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.jaopedrodev</groupId>
 	<artifactId>contactapi</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>contactapi</name>
 	<description>Contact API</description>
 	<url/>
